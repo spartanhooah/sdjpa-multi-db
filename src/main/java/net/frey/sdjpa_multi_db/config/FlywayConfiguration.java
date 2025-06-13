@@ -15,15 +15,15 @@ public class FlywayConfiguration {
 
     @Bean
     @ConfigurationProperties("spring.card.flyway")
-    public DataSourceProperties cardFlywayDataSourceProps(){
+    public DataSourceProperties cardFlywayDataSourceProps() {
         return new DataSourceProperties();
     }
 
     @Bean(initMethod = "migrate")
-    public Flyway flywayCard(@Qualifier("cardFlywayDataSourceProps")
-                             DataSourceProperties cardFlywayDataSourceProps){
+    public Flyway flywayCard(@Qualifier("cardFlywayDataSourceProps") DataSourceProperties cardFlywayDataSourceProps) {
         return Flyway.configure()
-                .dataSource(cardFlywayDataSourceProps.getUrl(),
+                .dataSource(
+                        cardFlywayDataSourceProps.getUrl(),
                         cardFlywayDataSourceProps.getUsername(),
                         cardFlywayDataSourceProps.getPassword())
                 .locations("classpath:/db/migration/card")
@@ -32,15 +32,16 @@ public class FlywayConfiguration {
 
     @Bean
     @ConfigurationProperties("spring.cardholder.flyway")
-    public DataSourceProperties cardholderFlywayDataSourceProps(){
+    public DataSourceProperties cardholderFlywayDataSourceProps() {
         return new DataSourceProperties();
     }
 
     @Bean(initMethod = "migrate")
-    public Flyway flywayCardHolder(@Qualifier("cardholderFlywayDataSourceProps")
-                                       DataSourceProperties cardholderFlywayDataSourceProps){
+    public Flyway flywayCardHolder(
+            @Qualifier("cardholderFlywayDataSourceProps") DataSourceProperties cardholderFlywayDataSourceProps) {
         return Flyway.configure()
-                .dataSource(cardholderFlywayDataSourceProps.getUrl(),
+                .dataSource(
+                        cardholderFlywayDataSourceProps.getUrl(),
                         cardholderFlywayDataSourceProps.getUsername(),
                         cardholderFlywayDataSourceProps.getPassword())
                 .locations("classpath:/db/migration/cardholder")
@@ -49,15 +50,15 @@ public class FlywayConfiguration {
 
     @Bean
     @ConfigurationProperties("spring.pan.flyway")
-    public DataSourceProperties panFlywayDataSourceProps(){
+    public DataSourceProperties panFlywayDataSourceProps() {
         return new DataSourceProperties();
     }
 
     @Bean(initMethod = "migrate")
-    public Flyway flywayPan(@Qualifier("panFlywayDataSourceProps")
-                                DataSourceProperties panFlywayDataSourceProps){
+    public Flyway flywayPan(@Qualifier("panFlywayDataSourceProps") DataSourceProperties panFlywayDataSourceProps) {
         return Flyway.configure()
-                .dataSource(panFlywayDataSourceProps.getUrl(),
+                .dataSource(
+                        panFlywayDataSourceProps.getUrl(),
                         panFlywayDataSourceProps.getUsername(),
                         panFlywayDataSourceProps.getPassword())
                 .locations("classpath:/db/migration/pan")

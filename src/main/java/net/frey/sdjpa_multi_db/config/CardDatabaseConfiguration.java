@@ -1,6 +1,7 @@
 package net.frey.sdjpa_multi_db.config;
 
 import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
 import net.frey.sdjpa_multi_db.domain.creditcard.CreditCard;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -13,16 +14,15 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
-
 /**
  * Created by jt on 7/1/22.
  */
-@EnableJpaRepositories(basePackages = "guruspringframework.sdjpamultidb.repositories.creditcard",
-entityManagerFactoryRef = "cardEntityManagerFactory", transactionManagerRef = "cardTransactionManager")
+@EnableJpaRepositories(
+        basePackages = "net.frey.sdjpa_multi_db.repositories.cardholder",
+        entityManagerFactoryRef = "cardEntityManagerFactory",
+        transactionManagerRef = "cardTransactionManager")
 @Configuration
 public class CardDatabaseConfiguration {
-
     @Bean
     @ConfigurationProperties("spring.card.datasource")
     public DataSourceProperties cardDataSourceProperties() {
@@ -30,16 +30,17 @@ public class CardDatabaseConfiguration {
     }
 
     @Bean
-    public DataSource cardDataSource(@Qualifier("cardDataSourceProperties") DataSourceProperties cardDataSourceProperties){
-        return cardDataSourceProperties.initializeDataSourceBuilder()
+    public DataSource cardDataSource(
+            @Qualifier("cardDataSourceProperties") DataSourceProperties cardDataSourceProperties) {
+        return cardDataSourceProperties
+                .initializeDataSourceBuilder()
                 .type(HikariDataSource.class)
                 .build();
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean cardEntityManagerFactory(
-            @Qualifier("cardDataSource") DataSource cardDataSource,
-                    EntityManagerFactoryBuilder builder){
+            @Qualifier("cardDataSource") DataSource cardDataSource, EntityManagerFactoryBuilder builder) {
         return builder.dataSource(cardDataSource)
                 .packages(CreditCard.class)
                 .persistenceUnit("card")
@@ -48,19 +49,7 @@ public class CardDatabaseConfiguration {
 
     @Bean
     public PlatformTransactionManager cardTransactionManager(
-            @Qualifier("cardEntityManagerFactory") LocalContainerEntityManagerFactoryBean cardEntityManagerFactory){
-
+            @Qualifier("cardEntityManagerFactory") LocalContainerEntityManagerFactoryBean cardEntityManagerFactory) {
         return new JpaTransactionManager(cardEntityManagerFactory.getObject());
     }
 }
-
-
-
-
-
-
-
-
-
-
-

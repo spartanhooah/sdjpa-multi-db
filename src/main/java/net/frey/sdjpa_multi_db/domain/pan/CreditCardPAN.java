@@ -1,8 +1,8 @@
 package net.frey.sdjpa_multi_db.domain.pan;
 
-import net.frey.sdjpa_multi_db.domain.CreditCardConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import net.frey.sdjpa_multi_db.domain.CreditCardConverter;
 
 @Entity
 @Getter
@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CreditCardPAN {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

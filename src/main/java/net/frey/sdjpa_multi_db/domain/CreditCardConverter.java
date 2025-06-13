@@ -1,24 +1,24 @@
 package net.frey.sdjpa_multi_db.domain;
 
-
-import net.frey.sdjpa_multi_db.config.SpringContextHelper;
-import net.frey.sdjpa_multi_db.services.EncryptionService;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import lombok.RequiredArgsConstructor;
+import net.frey.sdjpa_multi_db.services.EncryptionService;
+import org.springframework.stereotype.Component;
 
 @Converter
+@Component
+@RequiredArgsConstructor
 public class CreditCardConverter implements AttributeConverter<String, String> {
+    private final EncryptionService encryptionService;
+
     @Override
     public String convertToDatabaseColumn(String attribute) {
-        return getEncryptionService().encrypt(attribute);
+        return encryptionService.encrypt(attribute);
     }
 
     @Override
     public String convertToEntityAttribute(String dbData) {
-        return getEncryptionService().decrypt(dbData);
-    }
-
-    private EncryptionService getEncryptionService(){
-        return SpringContextHelper.getApplicationContext().getBean(EncryptionService.class);
+        return encryptionService.decrypt(dbData);
     }
 }

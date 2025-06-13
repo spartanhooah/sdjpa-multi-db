@@ -1,11 +1,13 @@
 package net.frey.sdjpa_multi_db.services;
 
 import net.frey.sdjpa_multi_db.domain.creditcard.CreditCard;
+import org.springframework.stereotype.Service;
 
-/**
- * Created by jt on 7/1/22.
- */
-public interface CreditCardService {
+@Service
+public class CreditCardService {
+    public CreditCard getCreditCardById(Long id) {
+        // todo impl
 
-    CreditCard getCreditCardById(Long id);
+        return null;
+    }
 }

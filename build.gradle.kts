@@ -63,6 +63,7 @@ tasks.wrapper {
 spotless {
 	java {
 		palantirJavaFormat()
+		removeUnusedImports()
 	}
 }
 

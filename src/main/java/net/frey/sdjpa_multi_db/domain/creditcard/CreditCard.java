@@ -1,8 +1,8 @@
 package net.frey.sdjpa_multi_db.domain.creditcard;
 
-import net.frey.sdjpa_multi_db.domain.CreditCardConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import net.frey.sdjpa_multi_db.domain.CreditCardConverter;
 
 @Entity
 @Getter
@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CreditCard {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,15 +20,4 @@ public class CreditCard {
 
     @Convert(converter = CreditCardConverter.class)
     private String expirationDate;
-
 }
-
-
-
-
-
-
-
-
-
-

@@ -1,6 +1,5 @@
 package net.frey.sdjpa_multi_db.domain.cardholder;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

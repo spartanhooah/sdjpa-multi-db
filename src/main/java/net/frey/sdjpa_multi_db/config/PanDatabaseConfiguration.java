@@ -1,6 +1,7 @@
 package net.frey.sdjpa_multi_db.config;
 
 import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
 import net.frey.sdjpa_multi_db.domain.pan.CreditCardPAN;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -14,13 +15,13 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
-
 /**
  * Created by jt on 7/1/22.
  */
-@EnableJpaRepositories(basePackages = "guruspringframework.sdjpamultidb.repositories.pan",
-entityManagerFactoryRef = "panEntityManagerFactory", transactionManagerRef = "panTransactionManager")
+@EnableJpaRepositories(
+        basePackages = "net.frey.sdjpa_multi_db.repositories.cardholder",
+        entityManagerFactoryRef = "panEntityManagerFactory",
+        transactionManagerRef = "panTransactionManager")
 @Configuration
 public class PanDatabaseConfiguration {
     @Bean
@@ -32,8 +33,10 @@ public class PanDatabaseConfiguration {
 
     @Primary
     @Bean
-    public DataSource panDataSource(@Qualifier("panDataSourceProperties") DataSourceProperties panDataSourceProperties){
-        return panDataSourceProperties.initializeDataSourceBuilder()
+    public DataSource panDataSource(
+            @Qualifier("panDataSourceProperties") DataSourceProperties panDataSourceProperties) {
+        return panDataSourceProperties
+                .initializeDataSourceBuilder()
                 .type(HikariDataSource.class)
                 .build();
     }
@@ -41,8 +44,7 @@ public class PanDatabaseConfiguration {
     @Primary
     @Bean
     public LocalContainerEntityManagerFactoryBean panEntityManagerFactory(
-            @Qualifier("panDataSource") DataSource panDataSource,
-            EntityManagerFactoryBuilder builder){
+            @Qualifier("panDataSource") DataSource panDataSource, EntityManagerFactoryBuilder builder) {
         return builder.dataSource(panDataSource)
                 .packages(CreditCardPAN.class)
                 .persistenceUnit("pan")
@@ -52,7 +54,7 @@ public class PanDatabaseConfiguration {
     @Primary
     @Bean
     public PlatformTransactionManager panTransactionManager(
-            @Qualifier("panEntityManagerFactory") LocalContainerEntityManagerFactoryBean panEntityManagerFactory){
+            @Qualifier("panEntityManagerFactory") LocalContainerEntityManagerFactoryBean panEntityManagerFactory) {
         return new JpaTransactionManager(panEntityManagerFactory.getObject());
     }
 }
