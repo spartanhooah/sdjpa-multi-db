@@ -14,23 +14,20 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-/**
- * Created by jt on 7/1/22.
- */
+@Configuration
 @EnableJpaRepositories(
         basePackages = "net.frey.sdjpa_multi_db.repositories.cardholder",
-        entityManagerFactoryRef = "cardholderEntityManagerFactory",
-        transactionManagerRef = "cardholderTransactionManager")
-@Configuration
+        entityManagerFactoryRef = "cardHolderEmf",
+        transactionManagerRef = "cardHolderTransactionManager")
 public class CardHolderDatabaseConfiguration {
-    @Bean
-    @ConfigurationProperties("spring.cardholder.datasource")
-    public DataSourceProperties cardHolderDataSourceProperties() {
+    @Bean("cardHolderDataSourceProperties")
+    @ConfigurationProperties("spring.datasource.cardholder")
+    public DataSourceProperties properties() {
         return new DataSourceProperties();
     }
 
-    @Bean
-    public DataSource cardholderDataSource(
+    @Bean("cardHolderDataSource")
+    public DataSource dataSource(
             @Qualifier("cardHolderDataSourceProperties") DataSourceProperties cardHolderDataSourceProperties) {
         return cardHolderDataSourceProperties
                 .initializeDataSourceBuilder()
@@ -38,19 +35,18 @@ public class CardHolderDatabaseConfiguration {
                 .build();
     }
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean cardholderEntityManagerFactory(
-            @Qualifier("cardholderDataSource") DataSource cardholderDataSource, EntityManagerFactoryBuilder builder) {
-        return builder.dataSource(cardholderDataSource)
+    @Bean("cardHolderEmf")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            @Qualifier("cardHolderDataSource") DataSource cardHolderDataSource, EntityManagerFactoryBuilder builder) {
+        return builder.dataSource(cardHolderDataSource)
                 .packages(CreditCardHolder.class)
                 .persistenceUnit("cardholder")
                 .build();
     }
 
-    @Bean
-    public PlatformTransactionManager cardholderTransactionManager(
-            @Qualifier("cardholderEntityManagerFactory")
-                    LocalContainerEntityManagerFactoryBean cardholderEntityManagerFactory) {
-        return new JpaTransactionManager(cardholderEntityManagerFactory.getObject());
+    @Bean("cardHolderTransactionManager")
+    public PlatformTransactionManager transactionManager(
+            @Qualifier("cardHolderEmf") LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
+        return new JpaTransactionManager(entityManagerFactoryBean.getObject());
     }
 }

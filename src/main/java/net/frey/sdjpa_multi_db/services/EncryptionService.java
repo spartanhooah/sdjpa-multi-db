@@ -4,9 +4,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by jt on 6/28/22.
- */
 @Service
 public class EncryptionService {
     public String encrypt(String freeText) {

@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    card:
+      username: carduser
+      password: password
+      url: jdbc:mysql://127.0.0.1:3306/card?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    cardholder:
+      username: cardholderuser
+      password: password
+      url: jdbc:mysql://127.0.0.1:3306/cardholder?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    pan:
+      username: panuser
+      password: password
+      url: jdbc:mysql://127.0.0.1:3306/pan?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      driver-class-name: com.mysql.cj.jdbc.Driver
