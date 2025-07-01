@@ -1,6 +1,7 @@
 package net.frey.sdjpa_multi_db.config;
 
 import com.zaxxer.hikari.HikariDataSource;
+import java.util.Properties;
 import javax.sql.DataSource;
 import net.frey.sdjpa_multi_db.domain.cardholder.CreditCardHolder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +28,7 @@ public class CardHolderDatabaseConfiguration {
     }
 
     @Bean("cardHolderDataSource")
+    @ConfigurationProperties("spring.datasource.cardholder.hikari")
     public DataSource dataSource(
             @Qualifier("cardHolderDataSourceProperties") DataSourceProperties cardHolderDataSourceProperties) {
         return cardHolderDataSourceProperties
@@ -38,10 +40,19 @@ public class CardHolderDatabaseConfiguration {
     @Bean("cardHolderEmf")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Qualifier("cardHolderDataSource") DataSource cardHolderDataSource, EntityManagerFactoryBuilder builder) {
-        return builder.dataSource(cardHolderDataSource)
+        var efb = builder.dataSource(cardHolderDataSource)
                 .packages(CreditCardHolder.class)
                 .persistenceUnit("cardholder")
                 .build();
+
+        var props = new Properties();
+        props.put("hibernate.hbm2ddl.auto", "validate");
+        props.put(
+                "hibernate.physical_naming_strategy",
+                "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+        efb.setJpaProperties(props);
+
+        return efb;
     }
 
     @Bean("cardHolderTransactionManager")

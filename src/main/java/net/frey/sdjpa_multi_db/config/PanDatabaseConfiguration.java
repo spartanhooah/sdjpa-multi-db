@@ -1,6 +1,7 @@
 package net.frey.sdjpa_multi_db.config;
 
 import com.zaxxer.hikari.HikariDataSource;
+import java.util.Properties;
 import javax.sql.DataSource;
 import net.frey.sdjpa_multi_db.domain.pan.CreditCardPAN;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +31,7 @@ public class PanDatabaseConfiguration {
 
     @Primary
     @Bean("panDataSource")
+    @ConfigurationProperties("spring.datasource.pan.hikari")
     public DataSource dataSource(
             @Qualifier("panDataSourceProperties") DataSourceProperties cardHolderDataSourceProperties) {
         return cardHolderDataSourceProperties
@@ -42,10 +44,19 @@ public class PanDatabaseConfiguration {
     @Bean("panEmf")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Qualifier("panDataSource") DataSource panDataSource, EntityManagerFactoryBuilder builder) {
-        return builder.dataSource(panDataSource)
+        var efb = builder.dataSource(panDataSource)
                 .packages(CreditCardPAN.class)
                 .persistenceUnit("pan")
                 .build();
+
+        var props = new Properties();
+        props.put("hibernate.hbm2ddl.auto", "validate");
+        props.put(
+                "hibernate.physical_naming_strategy",
+                "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+        efb.setJpaProperties(props);
+
+        return efb;
     }
 
     @Primary

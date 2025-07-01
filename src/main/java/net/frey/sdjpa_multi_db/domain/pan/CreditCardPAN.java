@@ -10,6 +10,7 @@ import net.frey.sdjpa_multi_db.domain.CreditCardConverter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "credit_card_pan")
 public class CreditCardPAN {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,4 +18,6 @@ public class CreditCardPAN {
 
     @Convert(converter = CreditCardConverter.class)
     private String creditCardNumber;
+
+    private Long creditCardId;
 }
